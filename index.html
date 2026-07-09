@@ -29,7 +29,7 @@
   @keyframes shine{ 0%{ transform:translateX(-130%) skewX(-18deg);} 55%,100%{ transform:translateX(320%) skewX(-18deg);} }
   @keyframes riseIn{ from{ opacity:0; transform:translateY(12px);} to{ opacity:1; transform:none;} }
   .gold{ position:relative; overflow:hidden;
-    background:linear-gradient(135deg,#e0c079,var(--gold) 46%,#b8912f); color:#fff; border:none; }
+    background:linear-gradient(135deg,#dcc27a,#b8912f); color:#fff; border:none; }
   .gold::after{ content:""; position:absolute; top:0; left:0; width:38%; height:100%;
     background:linear-gradient(100deg, transparent, rgba(255,255,255,.42), transparent);
     transform:translateX(-140%) skewX(-15deg); animation:shine 6.5s ease-in-out infinite; }
@@ -216,7 +216,7 @@ const ROOMLIST=[
 ];
 /* ワールドアプリ（7つの部屋）の色に合わせる */
 const CATCOLOR={
-  'New':{fg:'#c9a44e',d:'#a8863a',bg:'#f5ebd2'},
+  'New':{fg:'#dcc27a',d:'#b8912f',bg:'#f5ebd2'},
   '潜在意識':{fg:'#6f78b8',d:'#565ea0',bg:'#eceef7'},
   '體':{fg:'#d6919a',d:'#b06b75',bg:'#f8ebed'}, 'からだ':{fg:'#d6919a',d:'#b06b75',bg:'#f8ebed'},
   'お金':{fg:'#5aa8ca',d:'#3a8fb0',bg:'#e6f1f6'},
