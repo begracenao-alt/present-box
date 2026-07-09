@@ -80,6 +80,11 @@
   .gbox.sel .bow{ transform:translateX(-50%) translateY(-155%) rotate(-8deg); opacity:0; }
   .gbox.sel .knot{ transform:translateX(-50%) translateY(-155%); opacity:0; }
 
+  .inside-head{ display:flex; align-items:center; gap:12px; margin:16px 2px 6px; }
+  .back-btn{ background:#fff; border:1px solid var(--gold); color:var(--gold-d); border-radius:30px;
+    padding:12px 20px; font-size:15px; font-weight:700; cursor:pointer; white-space:nowrap; }
+  .back-btn:active{ background:#faf6ec; }
+  .inside-title{ font-size:18px; font-weight:600; font-family:"Hiragino Mincho ProN",serif; color:var(--ink); }
   .grid{ padding:8px 0 20px; }
   .card{ background:var(--card); border:1px solid var(--line); border-radius:18px;
     padding:19px 18px 16px; margin-bottom:15px; position:relative;
@@ -183,6 +188,10 @@
     <button class="add-btn gold" id="addBtn">＋ 贈りものを入れる</button>
     <div class="chips" id="chips"></div>
   </div>
+  <div class="inside-head" id="insideHead" style="display:none">
+    <button class="back-btn" id="backBtn">← 箱にもどる</button>
+    <div class="inside-title" id="insideTitle"></div>
+  </div>
   <div class="grid" id="grid"></div>
 
   <div class="edit-actions" id="editActions">
@@ -233,6 +242,22 @@ let filterCat=null;
 function uid(){ return "p"+Math.floor(performance.now()*1000)+"-"+items.length; }
 function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
+function showInside(){
+  document.getElementById("chips").style.display="none";
+  document.getElementById("addBtn").style.display="none";
+  document.getElementById("editActions").style.display="none";
+  document.getElementById("insideHead").style.display="flex";
+  document.getElementById("insideTitle").textContent = (filterCat==="" ? "すべてのプレゼント" : filterCat+"のプレゼント");
+  renderGrid();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function showBoxes(){
+  filterCat=null;
+  document.getElementById("insideHead").style.display="none";
+  document.getElementById("chips").style.display="";
+  if(isEdit){ document.getElementById("addBtn").style.display="block"; document.getElementById("editActions").style.display="flex"; }
+  renderChips(); renderGrid();
+}
 function renderChips(){
   const box=document.getElementById("chips"); box.innerHTML="";
   const mk=(label,val,col,i)=>{
@@ -241,9 +266,9 @@ function renderChips(){
     b.style.background="linear-gradient(150deg, "+col.fg+", "+col.d+")";
     b.style.setProperty("--d",(i*0.4)+"s");
     b.innerHTML='<div class="lid"></div><div class="rib"></div><div class="bow"></div><div class="knot"></div><div class="kira"></div><div class="glabel">'+esc(label)+'</div>';
-    b.onclick=()=>{ filterCat=val;
+    b.onclick=()=>{
       box.querySelectorAll(".gbox").forEach(g=>g.classList.remove("sel"));
-      b.classList.add("sel"); renderGrid(); };
+      b.classList.add("sel"); filterCat=val; setTimeout(showInside,480); };
     box.appendChild(b);
   };
   mk("すべて","",{fg:'#dcc27a',d:'#b8912f'},0);
@@ -390,6 +415,7 @@ if(isEdit){
   document.getElementById("exportBtn").onclick=exportBox;
   const tag=document.createElement("div"); tag.className="edit-tag"; tag.textContent="なお様の編集モード"; document.body.appendChild(tag);
 }
+document.getElementById("backBtn").onclick=showBoxes;
 renderChips(); renderGrid();
 </script>
 </body>
