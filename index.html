@@ -405,7 +405,7 @@ function openCats(){
 
 function exportBox(){
   let html="<!DOCTYPE html>\n"+document.documentElement.outerHTML;
-  html=html.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,"/*DATA_START*/[{"id":"g-mindbody","name":"潜在意識タイプ診断","category":"潜在意識","desc":"質問に答えると、あなたの潜在意識のタイプがわかります。","target":"自分の心のクセを知りたい方へ","url":"https://begracenao-alt.github.io/mindbody-box/","isNew":true,"copies":[]},{"id":"g-karada","name":"カラダの声診断","category":"體","desc":"今の體と心の声を、やさしく読み解く診断です。","target":"疲れやすい・頑張りすぎな方へ","url":"https://begracenao-alt.github.io/karada-box/","isNew":true,"copies":[]},{"id":"g-gift","name":"Be Grace ギフトボックス","category":"気づき","desc":"呼吸とミニ診断で、今の自分にそっと気づく贈りもの。","target":"ひと息つきたい方へ","url":"https://begracenao-alt.github.io/gift-box/","isNew":true,"copies":[]}]/*DATA_END*/");
+  html=html.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,"/*DATA_START*/"+JSON.stringify(items)+"/*DATA_END*/");
   const blob=new Blob([html],{type:"text/html"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="プレゼントボックス.html"; a.click();
   toast("公開用ファイルを作りました📤");
