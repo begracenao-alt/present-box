@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Be Grace プレゼントボックス</title>
+<meta name="theme-color" content="#ffffff">
+<style>
+  :root{
+    --card:#ffffff;
+    --ink:#3b4256; --sub:#8f97a8; --line:#e9edf4;
+    --gold:#c9a44e; --gold-d:#a8863a; --gold-lt:#e7d199;
+    --blue:#5a7fb5; --blue-d:#3f5f92;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; }
+  body{
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans",sans-serif;
+    color:var(--ink); line-height:1.8; padding-bottom:26px;
+    background:
+      radial-gradient(1100px 460px at 50% -8%, rgba(201,164,78,.13), transparent 60%),
+      radial-gradient(820px 460px at 88% 6%, rgba(90,127,181,.10), transparent 60%),
+      radial-gradient(760px 420px at 10% 22%, rgba(201,164,78,.07), transparent 60%),
+      #ffffff;
+    background-attachment:fixed;
+  }
+  .wrap{ max-width:660px; margin:0 auto; padding:0 16px; }
+
+  @keyframes shine{ 0%{ transform:translateX(-130%) skewX(-18deg);} 55%,100%{ transform:translateX(320%) skewX(-18deg);} }
+  @keyframes riseIn{ from{ opacity:0; transform:translateY(12px);} to{ opacity:1; transform:none;} }
+  .gold{ position:relative; overflow:hidden;
+    background:linear-gradient(135deg,#e0c079,var(--gold) 46%,#b8912f); color:#fff; border:none; }
+  .gold::after{ content:""; position:absolute; top:0; left:0; width:38%; height:100%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.42), transparent);
+    transform:translateX(-140%) skewX(-15deg); animation:shine 6.5s ease-in-out infinite; }
+
+  header{ text-align:center; padding:36px 16px 12px; position:relative; }
+  header .brand{ font-size:13px; letter-spacing:.44em; color:var(--gold-d); margin-left:.44em;
+    font-family:"Hiragino Mincho ProN",serif; }
+  header .brand-line{ width:38px; height:1px; margin:11px auto 15px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+  header .title{ font-size:25px; letter-spacing:.09em; font-weight:500; color:#b8912f;
+    font-family:"Hiragino Mincho ProN","YuMincho",serif; }
+  header .lead{ font-size:13.5px; color:var(--sub); margin-top:12px; line-height:2; }
+  header .lead b{ color:var(--blue-d); font-weight:600; }
+
+  .toolbar{ position:sticky; top:0; z-index:20; padding:12px 0 6px;
+    background:linear-gradient(180deg, rgba(255,255,255,.96) 72%, rgba(255,255,255,0)); }
+  .add-btn{ display:none; width:100%; border-radius:15px; padding:16px; font-size:16px;
+    font-weight:700; cursor:pointer; letter-spacing:.05em; margin:2px 0; }
+  .add-btn:active{ transform:translateY(1px); }
+
+  .chips{ display:grid; grid-template-columns:repeat(auto-fill, minmax(148px,1fr)); gap:14px; padding:16px 0 8px; }
+  .gbox{ position:relative; aspect-ratio:1/1; border-radius:16px; overflow:hidden; cursor:pointer;
+    border:none; padding:0; box-shadow:0 8px 20px -10px rgba(80,90,130,.5); transition:transform .12s; }
+  .gbox:active{ transform:scale(.97); }
+  .gbox .lid{ position:absolute; top:0; left:0; right:0; height:30%;
+    background:rgba(255,255,255,.16); border-bottom:2px solid rgba(255,255,255,.45); }
+  .gbox .rib{ position:absolute; top:0; bottom:0; left:50%; width:14px; transform:translateX(-50%);
+    background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.5)); }
+  .gbox .bow{ position:absolute; top:calc(30% - 14px); left:50%; transform:translateX(-50%); width:38px; height:18px; z-index:2; }
+  .gbox .bow::before, .gbox .bow::after{ content:""; position:absolute; top:0; width:18px; height:18px;
+    background:rgba(255,255,255,.92); border-radius:70% 70% 55% 55%; }
+  .gbox .bow::before{ left:0; transform:rotate(-20deg); }
+  .gbox .bow::after{ right:0; transform:rotate(20deg); }
+  .gbox .knot{ position:absolute; top:calc(30% - 7px); left:50%; transform:translateX(-50%);
+    width:12px; height:12px; border-radius:50%; background:#fff; z-index:3; box-shadow:0 1px 3px rgba(0,0,0,.15); }
+  .gbox::before{ content:""; position:absolute; left:0; right:0; bottom:0; height:56%; z-index:1;
+    background:linear-gradient(180deg, transparent, rgba(55,42,22,.34)); pointer-events:none; }
+  .gbox .glabel{ position:absolute; left:6px; right:6px; bottom:13px; text-align:center; color:#fff; z-index:4;
+    font-weight:800; font-size:16.5px; letter-spacing:.05em; text-shadow:0 1px 6px rgba(50,38,18,.55);
+    font-family:"Hiragino Mincho ProN",serif; }
+  .gbox .kira{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+  .gbox .kira::after{ content:""; position:absolute; top:0; left:0; width:62%; height:100%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.28), transparent);
+    transform:translateX(-160%) skewX(-15deg); animation:shine 7.5s ease-in-out infinite; animation-delay:var(--d,0s); }
+  .gbox .lid, .gbox .bow, .gbox .knot{ transition:transform .55s cubic-bezier(.25,.9,.3,1), opacity .45s; }
+  .gbox.sel{ overflow:visible; z-index:6; box-shadow:0 0 0 3px #fff, 0 14px 30px -8px rgba(80,90,130,.6); }
+  .gbox.sel .lid{ transform:translateY(-120%) rotate(-7deg); opacity:0; }
+  .gbox.sel .bow{ transform:translateX(-50%) translateY(-155%) rotate(-8deg); opacity:0; }
+  .gbox.sel .knot{ transform:translateX(-50%) translateY(-155%); opacity:0; }
+
+  .grid{ padding:8px 0 20px; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:18px;
+    padding:19px 18px 16px; margin-bottom:15px; position:relative;
+    box-shadow:0 6px 22px rgba(90,120,170,.09); animation:riseIn .45s ease; }
+  .card .newbadge{ position:absolute; top:-9px; left:16px; color:#fff; font-size:11px; font-weight:700;
+    letter-spacing:.14em; padding:3px 13px; border-radius:20px; }
+  .card .cardtop{ display:flex; align-items:flex-start; gap:10px; }
+  .card .name{ font-size:18.5px; font-weight:500; flex:1; line-height:1.5; letter-spacing:.02em;
+    font-family:"Hiragino Mincho ProN","YuMincho",serif; }
+  .card .cat{ flex:0 0 auto; font-size:12px; border-radius:20px; padding:3px 11px; margin-top:4px;
+    white-space:nowrap; letter-spacing:.04em; }
+  .card .desc{ font-size:14.5px; color:var(--ink); margin:11px 0 7px; white-space:pre-wrap; }
+  .card .target{ font-size:12.5px; color:var(--sub); margin-bottom:4px; }
+  .card .target b{ color:var(--blue-d); font-weight:600; }
+
+  .card .actions{ display:flex; flex-direction:column; gap:10px; margin-top:15px; }
+  .open-btn{ width:100%; text-align:center; border:none; border-radius:14px; padding:15px; font-size:16px;
+    font-weight:600; cursor:pointer; text-decoration:none; display:block; letter-spacing:.08em;
+    font-family:"Hiragino Mincho ProN",serif; }
+  .open-btn.off{ background:#eef1f6; color:#aab3c3; cursor:default; }
+  .mini{ width:100%; text-align:center; background:#fff; border:1px solid var(--gold-lt); color:var(--gold-d);
+    border-radius:14px; padding:14px; font-size:15px; font-weight:600; cursor:pointer; }
+  .mini.edit{ border-color:var(--line); color:var(--sub); }
+  .mini:active{ background:#faf6ec; }
+  .card .memo{ font-size:12.5px; color:var(--sub); margin-top:12px; padding-top:9px;
+    border-top:1px dashed var(--line); white-space:pre-wrap; }
+
+  .empty{ text-align:center; color:var(--sub); padding:58px 20px; font-size:14.5px; line-height:2.1; }
+  .empty .big{ font-size:40px; }
+
+  .copymenu{ position:absolute; z-index:60; background:#fff; border:1px solid var(--line);
+    border-radius:14px; box-shadow:0 12px 30px rgba(70,90,130,.18); padding:6px; min-width:200px; }
+  .copymenu .ttl{ font-size:11.5px; color:var(--sub); padding:6px 10px 4px; }
+  .copymenu button{ display:block; width:100%; text-align:left; background:none; border:none;
+    padding:12px 12px; font-size:14px; color:var(--ink); border-radius:10px; cursor:pointer; }
+  .copymenu button:active{ background:#f2f5fa; }
+
+  .edit-actions{ display:none; flex-direction:column; gap:10px; margin:24px 0 10px; }
+  .foot-btn{ width:100%; border:1px solid var(--blue); background:#fff; color:var(--blue-d);
+    border-radius:14px; font-size:15px; font-weight:700; padding:15px; cursor:pointer; }
+  .foot-btn:active{ transform:translateY(1px); }
+  .edit-tag{ position:fixed; top:8px; right:10px; z-index:40; background:var(--blue-d); color:#fff;
+    font-size:11px; padding:3px 10px; border-radius:20px; letter-spacing:.08em; }
+
+  .modal{ position:fixed; inset:0; z-index:100; background:rgba(40,50,75,.4);
+    display:flex; align-items:flex-end; justify-content:center; }
+  .sheet{ background:#fff; width:100%; max-width:560px; max-height:92vh;
+    border-radius:22px 22px 0 0; display:flex; flex-direction:column; overflow:hidden; }
+  @media(min-width:600px){ .modal{ align-items:center; } .sheet{ border-radius:22px; } }
+  .sheet-head{ flex:0 0 auto; padding:16px 18px 11px; border-bottom:1px solid var(--line); }
+  .sheet-head .h{ font-size:18px; font-weight:500; font-family:"Hiragino Mincho ProN",serif; letter-spacing:.04em; }
+  .sheet-body{ flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:14px 18px 18px; }
+  .sheet-foot{ flex:0 0 auto; padding:12px 18px calc(12px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line); background:#fff; display:flex; flex-direction:column-reverse; gap:10px; }
+  .sheet-foot .btn{ width:100%; border-radius:13px; padding:16px; font-size:16px; font-weight:700; cursor:pointer; border:1px solid var(--line); }
+  .sheet-foot .cancel{ background:#fff; color:var(--sub); }
+  .sheet-foot .save{ color:#fff; border:none; }
+
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:13px; color:var(--sub); font-weight:700; margin-bottom:5px; }
+  .field input, .field textarea, .field select{ width:100%; border:1px solid var(--line); border-radius:11px;
+    padding:12px 13px; font-size:16px; font-family:inherit; background:#fcfdff; color:var(--ink); }
+  .field input:focus, .field textarea:focus, .field select:focus{ outline:none; border-color:var(--blue); }
+  .field textarea{ min-height:64px; resize:vertical; line-height:1.6; }
+  .checkrow{ display:flex; align-items:center; gap:10px; background:#f3f7fc; border:1px solid #dde7f3;
+    border-radius:11px; padding:12px 14px; }
+  .checkrow input{ width:22px; height:22px; accent-color:var(--gold); }
+  .checkrow label{ margin:0; font-size:14px; color:var(--ink); font-weight:700; }
+  .copies-ttl{ font-size:13px; color:var(--sub); font-weight:700; margin:6px 0 6px; }
+  .copyitem{ border:1px solid var(--line); border-radius:13px; padding:12px; margin-bottom:10px; background:#fcfdff; }
+  .copyitem .row1{ display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+  .copyitem .row1 input{ flex:1; border:1px solid var(--line); border-radius:10px; padding:9px 11px; font-size:14px; background:#fff; }
+  .copyitem .row1 .rm{ background:none; border:none; color:#c88; opacity:.6; font-size:20px; cursor:pointer; padding:2px 6px; }
+  .copyitem textarea{ width:100%; border:1px solid var(--line); border-radius:10px; padding:10px 11px;
+    font-size:14px; font-family:inherit; min-height:58px; resize:vertical; background:#fff; }
+  .addcopy{ background:#fff; border:1.5px dashed var(--blue); color:var(--blue-d);
+    border-radius:11px; padding:12px; width:100%; font-size:14px; font-weight:700; cursor:pointer; }
+  .delrow{ text-align:center; margin-top:4px; }
+  .del-link{ background:none; border:none; color:#b98; font-size:13.5px; text-decoration:underline; cursor:pointer; }
+
+  .toast{ position:fixed; bottom:34px; left:50%; transform:translateX(-50%); z-index:200;
+    background:var(--blue-d); color:#fff; padding:11px 20px; border-radius:30px; font-size:14px;
+    opacity:0; transition:opacity .25s; pointer-events:none; }
+  .toast.show{ opacity:1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Be Grace</div>
+  <div class="brand-line"></div>
+  <div class="title">✨ プレゼントボックス ✨</div>
+  <div class="lead">
+    今のあなたに必要なものを、<br>
+    <b>ここから自由に受け取ってください</b>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <button class="add-btn gold" id="addBtn">＋ 贈りものを入れる</button>
+    <div class="chips" id="chips"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <div class="edit-actions" id="editActions">
+    <button class="foot-btn" id="editCatsBtn">🏷 しゅるいを編集する</button>
+    <button class="foot-btn" id="exportBtn">📤 公開用に書き出す</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* この中身が、公開すると会員さんみんなに届きます */
+const DEFAULT_ITEMS = /*DATA_START*/[{"id":"g-karada","name":"カラダの声診断","category":"體","desc":"今の體と心の声を、やさしく読み解く診断です。","target":"疲れやすい・頑張りすぎな方へ","url":"https://begracenao-alt.github.io/karada-box/","isNew":true,"copies":[]}]/*DATA_END*/;
+const DEFAULT_CATS = ["New","潜在意識","體","お金","LOVE","Beauty","健康","気づき","便利","その他"];
+
+/* しゅるいの色（白×青×金にあう、やさしい宝石いろ） */
+const ROOMLIST=[
+  {fg:'#6f78b8',d:'#565ea0',bg:'#eceef7'}, {fg:'#d6919a',d:'#b06b75',bg:'#f8ebed'},
+  {fg:'#5aa8ca',d:'#3a8fb0',bg:'#e6f1f6'}, {fg:'#b3a0db',d:'#8f7bc0',bg:'#f0ebf8'},
+  {fg:'#c9a85f',d:'#a8843f',bg:'#f5eeda'}, {fg:'#6fae8f',d:'#4f8e70',bg:'#e7f2ec'},
+  {fg:'#f3a24f',d:'#db7f2f',bg:'#fdeedd'}
+];
+/* ワールドアプリ（7つの部屋）の色に合わせる */
+const CATCOLOR={
+  'New':{fg:'#c9a44e',d:'#a8863a',bg:'#f5ebd2'},
+  '潜在意識':{fg:'#6f78b8',d:'#565ea0',bg:'#eceef7'},
+  '體':{fg:'#d6919a',d:'#b06b75',bg:'#f8ebed'}, 'からだ':{fg:'#d6919a',d:'#b06b75',bg:'#f8ebed'},
+  'お金':{fg:'#5aa8ca',d:'#3a8fb0',bg:'#e6f1f6'},
+  'LOVE':{fg:'#b3a0db',d:'#8f7bc0',bg:'#f0ebf8'},
+  'Beauty':{fg:'#c9a85f',d:'#a8843f',bg:'#f5eeda'},
+  '健康':{fg:'#6fae8f',d:'#4f8e70',bg:'#e7f2ec'},
+  '気づき':{fg:'#f3a24f',d:'#db7f2f',bg:'#fdeedd'},
+  '便利':{fg:'#9aa2b2',d:'#7d8698',bg:'#eef1f6'}, 'その他':{fg:'#9aa2b2',d:'#7d8698',bg:'#eef1f6'}
+};
+function catColor(name){ if(CATCOLOR[name]) return CATCOLOR[name];
+  let i=cats.indexOf(name); if(i<0) i=0; return ROOMLIST[i%ROOMLIST.length]; }
+
+const IKEY="present-box-items", CKEY="present-box-cats";
+function load(k,d){ try{ const v=JSON.parse(localStorage.getItem(k)); return v==null?d:v; }catch(e){ return d; } }
+let items=(function(){ let stored=[]; try{ const v=JSON.parse(localStorage.getItem(IKEY)); if(Array.isArray(v)) stored=v; }catch(e){} const m={}; DEFAULT_ITEMS.forEach(it=>m[it.id]=it); stored.forEach(it=>{ if(it&&it.id) m[it.id]=it; }); return Object.values(m); })(), cats=load(CKEY,DEFAULT_CATS);
+function saveItems(){ localStorage.setItem(IKEY,JSON.stringify(items)); }
+function saveCats(){ localStorage.setItem(CKEY,JSON.stringify(cats)); }
+
+/* なお様だけ編集モード（リンクの後ろに #nao を付けたときだけ） */
+const isEdit = (location.hash==="#nao" || location.hash==="#edit");
+
+let filterCat=null;
+function uid(){ return "p"+Math.floor(performance.now()*1000)+"-"+items.length; }
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function renderChips(){
+  const box=document.getElementById("chips"); box.innerHTML="";
+  const mk=(label,val,col,i)=>{
+    const b=document.createElement("button");
+    b.className="gbox"+(filterCat===val?" sel":"");
+    b.style.background="linear-gradient(150deg, "+col.fg+", "+col.d+")";
+    b.style.setProperty("--d",(i*0.4)+"s");
+    b.innerHTML='<div class="lid"></div><div class="rib"></div><div class="bow"></div><div class="knot"></div><div class="kira"></div><div class="glabel">'+esc(label)+'</div>';
+    b.onclick=()=>{ filterCat=val;
+      box.querySelectorAll(".gbox").forEach(g=>g.classList.remove("sel"));
+      b.classList.add("sel"); renderGrid(); };
+    box.appendChild(b);
+  };
+  mk("すべて","",{fg:'#dcc27a',d:'#b8912f'},0);
+  cats.forEach((c,idx)=> mk(c,c,catColor(c),idx+1));
+}
+
+function match(it){ if(filterCat===null) return false; if(filterCat==="") return true; return it.category===filterCat; }
+function renderGrid(){
+  const grid=document.getElementById("grid");
+  const list=items.filter(match);
+  if(list.length===0){ grid.innerHTML=""; return; }
+  grid.innerHTML="";
+  list.forEach(it=>{
+    const col=catColor(it.category);
+    const copies=(it.copies||[]).filter(c=>c&&(c.text||"").trim());
+    const card=document.createElement("div"); card.className="card";
+    card.innerHTML=`
+      ${it.isNew?`<span class="newbadge" style="background:${col.fg}">NEW</span>`:''}
+      <div class="cardtop">
+        <div class="name">${esc(it.name)||"（名前なし）"}</div>
+        ${it.category?`<span class="cat" style="color:${col.fg};background:${col.bg}">${esc(it.category)}</span>`:''}
+      </div>
+      ${it.desc?`<div class="desc">${esc(it.desc)}</div>`:''}
+      ${it.target?`<div class="target"><b>こんな方へ</b>　${esc(it.target)}</div>`:''}
+      <div class="actions">
+        ${it.url?`<a class="open-btn gold" href="${esc(it.url)}" target="_blank" rel="noopener">受け取る</a>`
+                :`<span class="open-btn off">じゅんび中</span>`}
+        ${copies.length?`<button class="mini copy" data-id="${it.id}">📋 コピー</button>`:''}
+        ${isEdit?`<button class="mini edit" data-id="${it.id}">なおす</button>`:''}
+      </div>
+      ${(isEdit&&it.memo)?`<div class="memo">📝 ${esc(it.memo)}</div>`:''}
+    `;
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll(".edit").forEach(b=> b.onclick=()=>openForm(b.dataset.id));
+  grid.querySelectorAll(".copy").forEach(b=> b.onclick=(e)=>openCopyMenu(e,b.dataset.id));
+}
+
+let openMenu=null;
+function closeCopyMenu(){ if(openMenu){ openMenu.remove(); openMenu=null; document.removeEventListener("click",onDoc,true); } }
+function onDoc(e){ if(openMenu && !openMenu.contains(e.target)) closeCopyMenu(); }
+function openCopyMenu(e,id){
+  e.stopPropagation(); closeCopyMenu();
+  const it=items.find(x=>x.id===id); if(!it) return;
+  const copies=(it.copies||[]).filter(c=>c&&(c.text||"").trim());
+  if(copies.length===1){ doCopy(copies[0].text); return; }
+  const menu=document.createElement("div"); menu.className="copymenu";
+  menu.innerHTML=`<div class="ttl">どれをコピーする？</div>`;
+  copies.forEach(c=>{ const b=document.createElement("button"); b.textContent=c.label||"（名前なし）";
+    b.onclick=()=>{ doCopy(c.text); closeCopyMenu(); }; menu.appendChild(b); });
+  document.body.appendChild(menu);
+  const r=e.target.getBoundingClientRect();
+  menu.style.top=(window.scrollY+r.bottom+6)+"px";
+  menu.style.left=Math.min(window.scrollX+r.left, window.scrollX+window.innerWidth-menu.offsetWidth-10)+"px";
+  openMenu=menu; setTimeout(()=>document.addEventListener("click",onDoc,true),0);
+}
+async function doCopy(t){ try{ await navigator.clipboard.writeText(t); toast("コピーしました📋"); }
+  catch(e){ prompt("下を長おしでコピーしてね",t); } }
+
+let editingId=null;
+function openForm(id){
+  editingId=id||null;
+  const it=id?items.find(x=>x.id===id):{name:"",category:cats[0]||"",desc:"",target:"",url:"",memo:"",isNew:!id,copies:[]};
+  const opts=cats.map(c=>`<option value="${esc(c)}"${c===it.category?" selected":""}>${esc(c)}</option>`).join("");
+  const modal=document.createElement("div"); modal.className="modal"; modal.id="formModal";
+  modal.innerHTML=`
+    <div class="sheet">
+      <div class="sheet-head"><div class="h">${id?"贈りものをなおす":"贈りものを入れる"}</div></div>
+      <div class="sheet-body">
+        <div class="field"><label>アプリ名</label><input id="f_name" type="text" value="${esc(it.name)}" placeholder="例：カラダの声診断"></div>
+        <div class="field"><label>しゅるい</label><select id="f_cat">${opts}</select></div>
+        <div class="field"><label>説明</label><textarea id="f_desc" placeholder="どんな贈りもの？">${esc(it.desc)}</textarea></div>
+        <div class="field"><label>こんな方へ</label><input id="f_target" type="text" value="${esc(it.target)}" placeholder="例：疲れやすい方へ"></div>
+        <div class="field"><label>受け取るリンク（URL）</label><input id="f_url" type="text" value="${esc(it.url)}" placeholder="https://…" inputmode="url"></div>
+        <div class="field checkrow"><input id="f_new" type="checkbox" ${it.isNew?"checked":""}><label for="f_new">「NEW」マークを付ける✨</label></div>
+        <div class="copies-ttl">📋 コピー文（LINE用・インスタ用など、何個でも）</div>
+        <div id="copyList"></div>
+        <button class="addcopy" id="addCopyBtn">＋ コピー文をふやす</button>
+        <div class="field" style="margin-top:14px"><label>メモ（自分用・会員さんには見えません）</label><textarea id="f_memo" placeholder="自分だけのメモ">${esc(it.memo)}</textarea></div>
+        ${id?`<div class="delrow"><button class="del-link" id="delBtn">この贈りものを消す</button></div>`:''}
+      </div>
+      <div class="sheet-foot">
+        <button class="btn cancel" id="cancelBtn">やめる</button>
+        <button class="btn save gold" id="saveBtn">保存する</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  const copyList=modal.querySelector("#copyList");
+  function addRow(label,text){ const row=document.createElement("div"); row.className="copyitem";
+    row.innerHTML=`<div class="row1"><input class="c_label" type="text" placeholder="用途（例：LINE配信用）" value="${esc(label||"")}"><button class="rm">×</button></div><textarea class="c_text" placeholder="コピーされる文章">${esc(text||"")}</textarea>`;
+    row.querySelector(".rm").onclick=()=>row.remove(); copyList.appendChild(row); }
+  (it.copies||[]).forEach(c=>addRow(c.label,c.text));
+  modal.querySelector("#addCopyBtn").onclick=()=>addRow("","");
+  modal.querySelector("#cancelBtn").onclick=closeForm;
+  modal.querySelector("#saveBtn").onclick=()=>{
+    const copies=[...copyList.querySelectorAll(".copyitem")].map(r=>({label:r.querySelector(".c_label").value.trim(),text:r.querySelector(".c_text").value})).filter(c=>c.label||c.text.trim());
+    const d={ name:modal.querySelector("#f_name").value.trim(), category:modal.querySelector("#f_cat").value,
+      desc:modal.querySelector("#f_desc").value.trim(), target:modal.querySelector("#f_target").value.trim(),
+      url:modal.querySelector("#f_url").value.trim(), memo:modal.querySelector("#f_memo").value.trim(),
+      isNew:modal.querySelector("#f_new").checked, copies };
+    if(!d.name){ toast("アプリ名を入れてね🙏"); return; }
+    if(editingId){ const i=items.findIndex(x=>x.id===editingId); items[i]={...items[i],...d}; }
+    else { items.unshift({id:uid(),...d}); }
+    saveItems(); closeForm(); renderChips(); renderGrid(); toast("保存しました😊");
+  };
+  const del=modal.querySelector("#delBtn");
+  if(del) del.onclick=()=>{ if(confirm("この贈りものを消してもいい？")){ items=items.filter(x=>x.id!==editingId); saveItems(); closeForm(); renderGrid(); toast("消しました"); } };
+}
+function closeForm(){ const m=document.getElementById("formModal"); if(m) m.remove(); editingId=null; }
+
+function openCats(){
+  const modal=document.createElement("div"); modal.className="modal"; modal.id="catModal";
+  modal.innerHTML=`<div class="sheet">
+    <div class="sheet-head"><div class="h">🏷 しゅるいを編集</div></div>
+    <div class="sheet-body"><div class="field"><label>1行に1つずつ。じゆうに足したり消したりできます。</label>
+      <textarea id="catText" style="min-height:240px">${esc(cats.join("\n"))}</textarea></div></div>
+    <div class="sheet-foot"><button class="btn cancel" id="catCancel">やめる</button><button class="btn save gold" id="catSave">保存する</button></div>
+  </div>`;
+  document.body.appendChild(modal);
+  modal.querySelector("#catCancel").onclick=()=>modal.remove();
+  modal.querySelector("#catSave").onclick=()=>{
+    const list=modal.querySelector("#catText").value.split(/\n+/).map(s=>s.trim()).filter(Boolean);
+    const seen=new Set(); cats=list.filter(c=>{ if(seen.has(c))return false; seen.add(c); return true; });
+    saveCats(); if(filterCat&&!cats.includes(filterCat)) filterCat="";
+    modal.remove(); renderChips(); renderGrid(); toast("しゅるいを保存しました");
+  };
+}
+
+function exportBox(){
+  let html="<!DOCTYPE html>\n"+document.documentElement.outerHTML;
+  html=html.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//,"/*DATA_START*/"+JSON.stringify(items)+"/*DATA_END*/");
+  const blob=new Blob([html],{type:"text/html"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="プレゼントボックス.html"; a.click();
+  toast("公開用ファイルを作りました📤");
+}
+
+let tt; function toast(m){ const el=document.getElementById("toast"); el.textContent=m; el.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>el.classList.remove("show"),1700); }
+
+if(isEdit){
+  document.getElementById("addBtn").style.display="block";
+  document.getElementById("editActions").style.display="flex";
+  document.getElementById("addBtn").onclick=()=>openForm(null);
+  document.getElementById("editCatsBtn").onclick=openCats;
+  document.getElementById("exportBtn").onclick=exportBox;
+  const tag=document.createElement("div"); tag.className="edit-tag"; tag.textContent="なお様の編集モード"; document.body.appendChild(tag);
+}
+renderChips(); renderGrid();
+</script>
+</body>
+</html>
