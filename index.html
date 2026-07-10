@@ -208,7 +208,7 @@
 
 <script>
 /* この中身が、公開すると会員さんみんなに届きます */
-const DEFAULT_ITEMS = /*DATA_START*/[{"id":"g-mindbody","name":"潜在意識タイプ診断","category":"潜在意識","desc":"質問に答えると、あなたの潜在意識のタイプがわかります。","target":"自分の心のクセを知りたい方へ","url":"https://begracenao-alt.github.io/mindbody-box/","isNew":true,"copies":[]},{"id":"g-karada","name":"カラダの声診断","category":"體","desc":"今の體と心の声を、やさしく読み解く診断です。","target":"疲れやすい・頑張りすぎな方へ","url":"https://begracenao-alt.github.io/karada-box/","isNew":true,"copies":[]},{"id":"g-gift","name":"Be Grace ギフトボックス","category":"気づき","desc":"呼吸とミニ診断で、今の自分にそっと気づく贈りもの。","target":"ひと息つきたい方へ","url":"https://begracenao-alt.github.io/gift-box/","isNew":true,"copies":[]}]/*DATA_END*/;
+const DEFAULT_ITEMS = /*DATA_START*/[{"id":"g-mindbody","name":"潜在意識タイプ診断","category":"潜在意識","desc":"質問に答えると、あなたの潜在意識のタイプがわかります。","target":"自分の心のクセを知りたい方へ","url":"https://begracenao-alt.github.io/mindbody-box/","isNew":true,"copies":[]},{"id":"g-karada","name":"カラダの声診断","category":"體","desc":"今の體と心の声を、やさしく読み解く診断です。","target":"疲れやすい・頑張りすぎな方へ","url":"https://begracenao-alt.github.io/karada-box/","isNew":true,"copies":[]},{"id":"g-gift","name":"デイリーギフト","category":"気づき","desc":"毎日ひとつことばを受け取り、問いに答える。自分の気持ちに気づくことからスタート。","target":"自分の気持ちに気づきたい方へ","url":"https://begracenao-alt.github.io/gift-box/","isNew":true,"copies":[]}]/*DATA_END*/;
 const DEFAULT_CATS = ["New","潜在意識","體","お金","LOVE","Beauty","健康","気づき","便利","その他"];
 
 /* しゅるいの色（白×青×金にあう、やさしい宝石いろ） */
@@ -238,6 +238,8 @@ function load(k,d){ try{ const v=JSON.parse(localStorage.getItem(k)); return v==
 let items=(function(){ let stored=[]; try{ const v=JSON.parse(localStorage.getItem(IKEY)); if(Array.isArray(v)) stored=v; }catch(e){} const m={}; DEFAULT_ITEMS.forEach(it=>m[it.id]=it); stored.forEach(it=>{ if(it&&it.id) m[it.id]=it; }); return Object.values(m); })(), cats=load(CKEY,DEFAULT_CATS);
 function saveItems(){ localStorage.setItem(IKEY,JSON.stringify(items)); }
 function saveCats(){ localStorage.setItem(CKEY,JSON.stringify(cats)); }
+/* しゅるいの箱が空っぽになってしまっても、必ず元に戻す保険 */
+if(!Array.isArray(cats) || cats.length===0){ cats=DEFAULT_CATS.slice(); saveCats(); }
 
 /* なお様だけ編集モード（リンクの後ろに #nao を付けたときだけ） */
 const isEdit = (location.hash==="#nao" || location.hash==="#edit");
