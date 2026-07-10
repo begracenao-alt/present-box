@@ -302,7 +302,7 @@ function renderGrid(){
       ${it.desc?`<div class="desc">${esc(it.desc)}</div>`:''}
       ${it.target?`<div class="target"><b>こんな方へ</b>　${esc(it.target)}</div>`:''}
       <div class="actions">
-        ${it.url?`<a class="open-btn kirabtn" style="background:linear-gradient(135deg,${col.fg},${col.d})" href="${esc(it.url)}" target="_blank" rel="noopener">受け取る</a>`
+        ${it.url?`<a class="open-btn kirabtn" style="background:linear-gradient(135deg,${col.fg},${col.d})" href="${esc(it.url)}">受け取る</a>`
                 :`<span class="open-btn off">じゅんび中</span>`}
         ${copies.length?`<button class="mini copy" data-id="${it.id}">📋 コピー</button>`:''}
         ${isEdit?`<button class="mini edit" data-id="${it.id}">なおす</button>`:''}
