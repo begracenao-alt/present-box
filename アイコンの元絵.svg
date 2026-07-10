@@ -26,24 +26,34 @@
       <stop offset="0.83" stop-color="#7b84c6"/>
       <stop offset="1.00" stop-color="#bface6"/>
     </linearGradient>
+    <linearGradient id="goldT" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6ecc9"/>
+      <stop offset="1" stop-color="#e2c176"/>
+    </linearGradient>
   </defs>
   <rect width="512" height="512" fill="url(#bgC)"/>
-  <circle cx="256" cy="248" r="210" fill="url(#glow)"/>
+  <circle cx="256" cy="262" r="205" fill="url(#glow)"/>
+
+  <!-- Be Grace -->
+  <text x="256" y="118" text-anchor="middle" font-family="Hiragino Mincho ProN, Georgia, serif"
+        font-size="52" letter-spacing="3" fill="url(#goldT)" font-weight="500">Be Grace</text>
+  <line x1="196" y1="140" x2="316" y2="140" stroke="#e2c176" stroke-width="1.5" opacity="0.7"/>
+
   <!-- box -->
-  <rect x="120" y="240" width="272" height="188" rx="16" fill="#fbf6ec" stroke="#e7d9bd" stroke-width="1.5"/>
-  <rect x="104" y="204" width="304" height="52" rx="13" fill="#ffffff" stroke="#e7d9bd" stroke-width="1.5"/>
-  <rect x="237" y="204" width="38" height="224" fill="url(#rbCv)"/>
-  <rect x="104" y="218" width="304" height="26" fill="url(#rbC)"/>
+  <rect x="120" y="268" width="272" height="176" rx="16" fill="#fbf6ec" stroke="#e7d9bd" stroke-width="1.5"/>
+  <rect x="104" y="234" width="304" height="50" rx="13" fill="#ffffff" stroke="#e7d9bd" stroke-width="1.5"/>
+  <rect x="237" y="234" width="38" height="210" fill="url(#rbCv)"/>
+  <rect x="104" y="247" width="304" height="25" fill="url(#rbC)"/>
   <g>
-    <path d="M256 204 C 208 152, 138 156, 154 204 C 140 222, 212 226, 256 208 Z" fill="url(#rbC)"/>
-    <path d="M256 204 C 304 152, 374 156, 358 204 C 372 222, 300 226, 256 208 Z" fill="url(#rbC)"/>
-    <circle cx="256" cy="204" r="20" fill="url(#rbC)"/>
-    <circle cx="250" cy="198" r="6" fill="#ffffff" opacity="0.5"/>
+    <path d="M256 234 C 208 184, 138 188, 154 234 C 140 251, 212 255, 256 238 Z" fill="url(#rbC)"/>
+    <path d="M256 234 C 304 184, 374 188, 358 234 C 372 251, 300 255, 256 238 Z" fill="url(#rbC)"/>
+    <circle cx="256" cy="234" r="19" fill="url(#rbC)"/>
+    <circle cx="250" cy="228" r="6" fill="#ffffff" opacity="0.5"/>
   </g>
   <!-- sparkles -->
   <g fill="#f3e6bf">
-    <path d="M150 140 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4z"/>
-    <path d="M372 150 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
-    <path d="M388 320 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+    <path d="M138 200 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4z"/>
+    <path d="M382 205 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
+    <path d="M392 340 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
   </g>
 </svg>
