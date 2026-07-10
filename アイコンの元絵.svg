@@ -1,0 +1,49 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgC" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0" stop-color="#3a4266"/>
+      <stop offset="1" stop-color="#232a45"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f3e6bf" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f3e6bf" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rbC" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0.00" stop-color="#e59aa4"/>
+      <stop offset="0.17" stop-color="#f6ab5a"/>
+      <stop offset="0.34" stop-color="#f0cd6d"/>
+      <stop offset="0.50" stop-color="#7bbd9c"/>
+      <stop offset="0.66" stop-color="#63b4d6"/>
+      <stop offset="0.83" stop-color="#7b84c6"/>
+      <stop offset="1.00" stop-color="#bface6"/>
+    </linearGradient>
+    <linearGradient id="rbCv" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.00" stop-color="#e59aa4"/>
+      <stop offset="0.17" stop-color="#f6ab5a"/>
+      <stop offset="0.34" stop-color="#f0cd6d"/>
+      <stop offset="0.50" stop-color="#7bbd9c"/>
+      <stop offset="0.66" stop-color="#63b4d6"/>
+      <stop offset="0.83" stop-color="#7b84c6"/>
+      <stop offset="1.00" stop-color="#bface6"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bgC)"/>
+  <circle cx="256" cy="248" r="210" fill="url(#glow)"/>
+  <!-- box -->
+  <rect x="120" y="240" width="272" height="188" rx="16" fill="#fbf6ec" stroke="#e7d9bd" stroke-width="1.5"/>
+  <rect x="104" y="204" width="304" height="52" rx="13" fill="#ffffff" stroke="#e7d9bd" stroke-width="1.5"/>
+  <rect x="237" y="204" width="38" height="224" fill="url(#rbCv)"/>
+  <rect x="104" y="218" width="304" height="26" fill="url(#rbC)"/>
+  <g>
+    <path d="M256 204 C 208 152, 138 156, 154 204 C 140 222, 212 226, 256 208 Z" fill="url(#rbC)"/>
+    <path d="M256 204 C 304 152, 374 156, 358 204 C 372 222, 300 226, 256 208 Z" fill="url(#rbC)"/>
+    <circle cx="256" cy="204" r="20" fill="url(#rbC)"/>
+    <circle cx="250" cy="198" r="6" fill="#ffffff" opacity="0.5"/>
+  </g>
+  <!-- sparkles -->
+  <g fill="#f3e6bf">
+    <path d="M150 140 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4z"/>
+    <path d="M372 150 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
+    <path d="M388 320 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+  </g>
+</svg>
