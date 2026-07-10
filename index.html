@@ -179,6 +179,11 @@
     background:var(--blue-d); color:#fff; padding:11px 20px; border-radius:30px; font-size:14px;
     opacity:0; transition:opacity .25s; pointer-events:none; }
   .toast.show{ opacity:1; }
+
+  .copyright{ text-align:center; color:var(--sub); font-size:11.5px; letter-spacing:.14em;
+    padding:30px 16px 14px; font-family:"Hiragino Mincho ProN",serif; }
+  .copyright::before{ content:""; display:block; width:34px; height:1px; margin:0 auto 14px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent); }
 </style>
 </head>
 <body>
@@ -209,6 +214,8 @@
     <button class="foot-btn" id="exportBtn">📤 公開用に書き出す</button>
   </div>
 </div>
+
+<footer class="copyright">© Be Grace</footer>
 
 <div class="toast" id="toast"></div>
 
